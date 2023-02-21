@@ -19,6 +19,7 @@ public class EstructurasDeControl {
 		for (int i=0; i<10; i++) {
 			System.out.print( " " + i );
 		}
+		// System.out.println( i ); // No se puede, i no tiene ámbito
 		System.out.println();
 		// Foreach  (recorre TODOS los elementos de una estructura secuencial -por ejemplo un array-)
 		int[] valores = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -30,6 +31,7 @@ public class EstructurasDeControl {
 		int i=0;
 		while (i<10) {
 			System.out.print( " " + i );
+			System.out.println( valores[i]);
 			i++;
 		}
 		System.out.println();
@@ -49,16 +51,20 @@ public class EstructurasDeControl {
 		// Recorrer hasta encontrar una condición de final (break)
 		int[] valores2 = { 0, 1, 2, 3, 4, -5, 6, 7, 8, 9 };
 		for (int j : valores2) {
-			if (j<0) break;  // En cuanto encuentra este valor el bucle ya no sigue
+			if (j<0) { break; }  // En cuanto encuentra este valor el bucle ya no sigue
 			System.out.print( " " + j );
 		}
 		System.out.println();
 		// Recorrer ignorando valores específicos (continue)
 		for (int j : valores2) {
-			if (j<0) continue;  // Estos valores no se procesan, pero el bucle sigue con los siguientes
+			if (j<0) { continue; }  // Estos valores no se procesan, pero el bucle sigue con los siguientes
 			System.out.print( " " + j );
 		}
 		System.out.println();
+		// Ojo con los bloques de una sentencia
+		if (valores[0]==0)
+			System.out.println( "otra cosa" );
+			System.out.println( valores[1] );  // ¿está dentro del if?
 	}
 	
 	private static void alternativas() {

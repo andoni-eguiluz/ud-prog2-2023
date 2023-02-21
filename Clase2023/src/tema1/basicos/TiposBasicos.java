@@ -9,17 +9,23 @@ public class TiposBasicos {
 	
 	// Mundo STATIC - de clase - solo una vez - siempre
 	
-	public static int datoEstatico;  // Este atributo es una variable que existe todo el tiempo del programa y solo una vez	
+	public static final int ANYO_CREACION = 2023;
+	public static int datoEstatico; // = 0;  // Este atributo es una variable que existe todo el tiempo del programa y solo una vez	
 	
 	// Método principal
 	public static void main(String[] params) {
+		// ANYO_CREACION = 5;  // No se puede cambiar una constante
+		int datoEstatico;
+		datoEstatico = 5;
 		System.out.println( datoEstatico );
+		System.out.println( TiposBasicos.datoEstatico );
 		tiposPrimitivos( 3, '3' );
 		expresiones();
 		ambito(5);
 		System.out.println( potencia(3) );
 		System.out.println( potencia(3,4) );
 		System.out.println( potencia(3L,4L) );
+		System.out.println( potencia(3,4L) );
 		return;
 	}
 
@@ -45,14 +51,14 @@ public class TiposBasicos {
 		System.out.println( varLong );
 		System.out.println( Long.MIN_VALUE );  // A consola los long mínimo y máximo
 		System.out.println( Long.MAX_VALUE );
-		System.out.println( System.currentTimeMillis() );
+		System.out.println( "Ahora: " + System.currentTimeMillis() );
 		System.out.println( new Date( System.currentTimeMillis() ) );
 		System.out.println( new Date( Long.MAX_VALUE ) );
 		// Las declaraciones pueden ser con inicialización (se hace a menudo, es muy cómodo)
 		int varInt2 = 17;
 		
 		// 2 tipos son numéricos reales
-		float f1 = 3.0f; // otra manera (float) 3.2;  // Por defecto 3.2 es double   (4 bytes)
+		float f1 = 3.0F; // otra manera (float) 3.2;  // Por defecto 3.2 es double   (4 bytes)
 		double d1 = 3.2;  // (8 bytes)
 		float  f2 = (float) d1;  // conversión explícita
 		System.out.println( Float.MIN_VALUE );
@@ -81,6 +87,9 @@ public class TiposBasicos {
 		int i = 2 * 5;
 		int j = i * i + 3;  // Precedencias (* antes que +)
 		int k = (i + j) * 3;
+		long largo = 5L + k;  // conversión implícita
+		int noLargo = (int) (largo + 7);  // conversión explícita
+		k++;
 		// Precedencia general de operadores:
 		// ++ -- !      (los de mayor precedencia - los primeros que se ejecutan)
 		// * / %
