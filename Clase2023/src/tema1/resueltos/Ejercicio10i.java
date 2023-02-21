@@ -1,10 +1,10 @@
 package tema1.resueltos;
 
 public class Ejercicio10i {
-//	Crea dos arrays, uno con los nombres de 4 o 5 usuarios de cualquier red social que uses,
-//	y otro con sus seguidores. Realiza un programa que muestre por consola esos usuarios 
-//  primero sin ordenar y luego ordenados por número de seguidores 
-//	(de mayor a menor).
+	//	Crea dos arrays, uno con los nombres de 4 o 5 usuarios de cualquier red social que uses,
+	//	y otro con sus seguidores. Realiza un programa que muestre por consola esos usuarios 
+	//  primero sin ordenar y luego ordenados por número de seguidores 
+	//	(de mayor a menor).
 
 	public static void main(String[] args) {
 		String[] usuarios = { "@sama", "@JeffBezos", "@BillGates", "@elonmusk" };
