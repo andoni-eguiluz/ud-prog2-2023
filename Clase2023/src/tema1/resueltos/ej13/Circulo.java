@@ -2,16 +2,17 @@ package tema1.resueltos.ej13;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.util.Date;
 import java.util.Random;
+
+import utils.ventanas.ventanaBitmap.VentanaGrafica;
 
 public class Circulo {
 
 	private static float grosor = 1.0f; // grosor del círculo, en píxeles
-	private static final int RADIO_MINIMO = 10; // Radio mínimo de círculo aleatorio
-	private static final int RADIO_MAXIMO = 20; // Radio máximo de círculo aleatorio
-	private static final int X_MAXIMA = 500;
-	private static final int Y_MAXIMA = 300;
+	public static final int RADIO_MINIMO = 10; // Radio mínimo de círculo aleatorio
+	public static final int RADIO_MAXIMO = 20; // Radio máximo de círculo aleatorio
+	public static final int X_MAXIMA = 500; // X máxima de círculo aleatorio
+	public static final int Y_MAXIMA = 300; // Y máxima de círculo aleatorio
 	private static final Random random = new Random();
 
 	public static float getGrosor() {
@@ -55,7 +56,8 @@ public class Circulo {
 	 * @param colorRelleno	Color de rellenoe
 	 */
 	public Circulo(int radioEnPixels, Point centro, Color colorBorde, Color colorRelleno) {
-		this( radioEnPixels, centro.x, centro.y, colorBorde, colorRelleno );
+		this( radioEnPixels, centro.x, centro.y, colorBorde, colorRelleno );  // Llamada a código de otro constructor (reutilización)
+// Así no hace falta repetir código:
 //		this.radioEnPixels = radioEnPixels;
 //		this.xCentro = centro.x;
 //		this.yCentro = centro.y;
@@ -70,15 +72,20 @@ public class Circulo {
 	 * @param yCentro	Coordenada y del centro del círculo, en píxeles (de arriba abajo)
 	 */
 	public Circulo(int radioEnPixels, int xCentro, int yCentro) {
-		this.radioEnPixels = radioEnPixels;
-		this.xCentro = xCentro;
-		this.yCentro = yCentro;
-		colorBorde = Color.BLUE;
-		colorRelleno = Color.YELLOW;
-		tiempoCreacionMs = System.currentTimeMillis();
+		this( radioEnPixels, xCentro, yCentro, Color.BLUE, Color.YELLOW );
+//		this.radioEnPixels = radioEnPixels;
+//		this.xCentro = xCentro;
+//		this.yCentro = yCentro;
+//		colorBorde = Color.BLUE;
+//		colorRelleno = Color.YELLOW;
+//		tiempoCreacionMs = System.currentTimeMillis();
 	}
 	
-	// Constructor aleatorio
+	// TODO javadoc nuevo desde la última versión de clase (observad los links y el cambio a public de las constantes)
+	/** Crea un círculo nuevo de coordenadas, radio y color aleatorios.
+	 * El radio estará entre {@link #RADIO_MINIMO} y {@link #RADIO_MAXIMO} pixels
+	 * El centro tendrá una x entre 0 y {@link #X_MAXIMA}, y entre 0 y {@link #Y_MAXIMA} 
+	 */
 	public Circulo() {
 		radioEnPixels = RADIO_MINIMO + random.nextInt( RADIO_MAXIMO-RADIO_MINIMO+1 ); // 0-10 + 10
 		xCentro = random.nextInt( X_MAXIMA );
@@ -88,9 +95,22 @@ public class Circulo {
 		colorRelleno = colores[ random.nextInt( colores.length ) ];
 		tiempoCreacionMs = System.currentTimeMillis();
 	}
-	
-	
-	
+
+	// TODO nuevo desde la última versión de clase
+	/** Crea un círculo nuevo de coordenadas, radio y color aleatorios.
+	 * El radio estará entre {@link #RADIO_MINIMO} y {@link #RADIO_MAXIMO} pixels
+	 * La posición será una coordenada válida para la ventana indicada 
+	 * @param ventana	Ventana que marca el espacio visible en el que localizar al círculo
+	 */
+	public Circulo( VentanaGrafica ventana ) {
+		radioEnPixels = RADIO_MINIMO + random.nextInt( RADIO_MAXIMO-RADIO_MINIMO+1 ); // 0-10 + 10
+		xCentro = random.nextInt( ventana.getAnchura() - radioEnPixels*2 ) + radioEnPixels ;
+		yCentro = random.nextInt( ventana.getAltura() - radioEnPixels*2 ) + radioEnPixels;
+		colorBorde = new Color( random.nextInt(256), random.nextInt(256), random.nextInt(256));
+		Color[] colores = { Color.BLUE, Color.PINK, Color.CYAN, Color.GREEN };
+		colorRelleno = colores[ random.nextInt( colores.length ) ];
+		tiempoCreacionMs = System.currentTimeMillis();
+	}
 	
 	public int getxCentro() {
 		return xCentro;
@@ -135,7 +155,30 @@ public class Circulo {
 	public String toString() {
 		return String.format( "(%d,%d) - %d", xCentro, yCentro, radioEnPixels );
 	}
-	
 
+	// TODO métodos nuevos
+	
+	/** Devuelve el tiempo que este círculo lleva de vida desde que se creó hasta este momento
+	 * @return	Número de milisegundos transcurridos
+	 */
+	public long getTiempoVida() {
+		return System.currentTimeMillis() - tiempoCreacionMs;
+	}
+
+	/** Dibuja el círculo
+	 * @param v	Ventana en la que dibujar el círculo
+	 */
+	public void dibujar( VentanaGrafica v ) {
+		v.dibujaCirculo( xCentro, yCentro, radioEnPixels, 2.0f, colorBorde, colorRelleno );
+	}
+
+	/** Informa si el círculo contiene un punto de la ventana
+	 * @param punto	Punto a consultar
+	 * @return	true si ese punto está dentro del círculo (incluyendo su borde), false si no lo está
+	 */
+	public boolean contienePunto( Point punto ) {
+		double distCentroAPunto = Math.sqrt( (xCentro-punto.x)*(xCentro-punto.x) + (yCentro-punto.y)*(yCentro-punto.y) );
+		return distCentroAPunto <= radioEnPixels;
+	}
 	
 }

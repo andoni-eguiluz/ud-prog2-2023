@@ -1,30 +1,62 @@
 package tema1.resueltos.ej13;
 
-import java.awt.Color;
+import java.awt.Font;
 import java.awt.Point;
+
 import utils.ventanas.ventanaBitmap.VentanaGrafica;
 
+// TODO creado desde la última clase
+
+/** Ejercicio 1.13 resuelto (primera versión del clicker)
+ * @author andoni.eguiluz @ ingenieria.deusto.es
+ */
 public class ClickerV1 {
+
+	private static final long TIEMPO_MAXIMO_PUNTOS = 2000;
+	private static VentanaGrafica ventana;
+	private static int puntos;
+	
 	public static void main(String[] args) {
-		Circulo c = new Circulo( 15, 100, 200, Color.CYAN, Color.BLUE );
-		System.out.println( c.toString() );
-		Point punto = new Point( 200, 150 );
-		Circulo c2 = new Circulo( 15, punto, Color.WHITE, Color.BLUE );
-		System.out.println( c2 );
-		Circulo c3 = new Circulo( 20, 80, 90 );
-		System.out.println( c3 + " color " + c3.getColorBorde() );
-		Circulo c4 = new Circulo();
-		System.out.println( c4 );
-		crearVentana( c4 );
+		initVentana();
+		juego();
 	}
 	
-	private static void crearVentana( Circulo c) {
-		// Pruebas de ventana gráfica
-		VentanaGrafica vent = new VentanaGrafica( 800, 600, "Mi ventanita" );
-		vent.dibujaCirculo( c.getxCentro(), c.getyCentro(), c.getRadioEnPixels(), Circulo.getGrosor(), 
-				c.getColorBorde(), c.getColorRelleno() );
-		Point punto = vent.getRatonClicado();
-		punto = vent.esperaAClick();
-		System.out.println( punto );
+	private static void initVentana() {
+		ventana = new VentanaGrafica( 800, 600, "Clicker (ej. 1.13)" );
+		ventana.setMensajeFont( new Font( "Arial", Font.PLAIN, 24 ) );  // TODO objeto Font
 	}
+	
+	private static void juego() {
+		puntos = 0;
+		while (!ventana.estaCerrada()) {
+			Circulo circulo = creaNuevoCirculo();
+			ventana.borra();
+			circulo.dibujar( ventana );
+			esperaAClickEnCirculo( circulo );
+			long tiempo = circulo.getTiempoVida();
+			if (tiempo < TIEMPO_MAXIMO_PUNTOS) {
+				puntos += (int) (TIEMPO_MAXIMO_PUNTOS - tiempo);
+				ventana.setMensaje( "Puntos: " + puntos );
+			}
+		}
+	}
+	
+	private static Circulo creaNuevoCirculo() {
+		return new Circulo( ventana );
+	}
+	
+	private static void esperaAClickEnCirculo( Circulo circulo ) {
+		while (!ventana.estaCerrada()) {  // TODO Ojo a esta condición (true = no se acaba - probar)
+			Point click = ventana.esperaAClick();
+			if (click!=null) {
+				if (circulo.contienePunto( click )) {
+					return;
+				} else {
+					puntos -= 1000;
+					ventana.setMensaje( "Puntos: " + puntos );
+				}
+			}
+		}
+	}
+	
 }
