@@ -31,6 +31,7 @@ public class ClickerV2 {
 	private static void initVentana() {
 		ventana = new VentanaGrafica( 800, 600, "Clicker (ej. 1.13)" );
 		ventana.setMensajeFont( new Font( "Arial", Font.PLAIN, 24 ) );
+		ventana.setDibujadoInmediato(false);
 	}
 	
 	private static void juego() {
@@ -55,6 +56,7 @@ public class ClickerV2 {
 			for (Circulo circulo : circulos) {
 				circulo.dibujar( ventana );
 			}
+			ventana.repaint();
 			// Mecánica 2: click en círculo - puntuación
 			Circulo circuloClick = hayClickEnAlgunCirculo( circulos );
 			if (circuloClick!=null) {
