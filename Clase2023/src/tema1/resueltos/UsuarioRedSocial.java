@@ -1,6 +1,6 @@
 package tema1.resueltos;
 
-/** Clase que define usuarios de redes sociales
+/** Clase que define usuarios de redes sociales (ejercicio 1.0.i)
  * @author andoni.eguiluz at ingenieria.deusto.es
  */
 public class UsuarioRedSocial {
