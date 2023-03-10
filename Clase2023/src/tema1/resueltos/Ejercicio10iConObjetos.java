@@ -44,7 +44,7 @@ public class Ejercicio10iConObjetos {
 	
 	private static void pruebasVarias() {
 		UsuarioRedSocial u = new UsuarioRedSocial();
-		u.setMilesSeguidores( -5000 );  // Importancia del set para modificar con posible error (con atributos no podríamos detectarlo)
+		u.setSeguidores( -5000 );  // Importancia del set para modificar con posible error (con atributos no podríamos detectarlo)
 		u.sacarAConsola();
 	}
 	
@@ -60,7 +60,7 @@ public class Ejercicio10iConObjetos {
 	private static void ordenaUsuariosPorSeguidores(UsuarioRedSocial[] usuariosRS) {
 		for (int pasada=0; pasada<usuariosRS.length-1; pasada++) {
 			for (int comp=0; comp<usuariosRS.length-1; comp++) {  // TODO mejorar que solo se hagan las comparaciones necesarias
-				boolean hayQueIntercambiar = usuariosRS[comp].getMilesSeguidores() < usuariosRS[comp+1].getMilesSeguidores();
+				boolean hayQueIntercambiar = usuariosRS[comp].getSeguidores() < usuariosRS[comp+1].getSeguidores();
 				if (hayQueIntercambiar) {
 					UsuarioRedSocial aux = usuariosRS[comp];
 					usuariosRS[comp] = usuariosRS[comp+1];
