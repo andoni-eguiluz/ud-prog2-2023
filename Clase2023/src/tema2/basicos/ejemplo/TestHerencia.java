@@ -123,7 +123,8 @@ public class TestHerencia {
 		for (Object posibleEsfera : listaGenerica) {
 			// posibleEsfera.dibujar( v );  // No se puede pero...
 			if (posibleEsfera instanceof Esfera) {
-				((Esfera) posibleEsfera).dibujar( v );
+				Esfera e = (Esfera) posibleEsfera;
+				e.dibujar( v );
 			}
 		}
 		v.esperaAClick();
@@ -198,7 +199,9 @@ public class TestHerencia {
 	private static void animacionPlanetasYBurbujas() {
 		ArrayList<Esfera> lEsferas = new ArrayList<>();
 		lEsferas.add( new Planeta( "tierra", 280, 300, 150 ) );
-		lEsferas.add( new Planeta( "marte", 570, 450, 75 ) );
+		Planeta marte = new Planeta( "marte", 570, 450, 75 );
+		marte.setTiempoRotacion( 2000 );
+		lEsferas.add( marte );
 		lEsferas.add( new Burbuja( 50, 520, 90 ) );
 		lEsferas.add( new Burbuja( 400, 450, 110 ) );
 		lEsferas.add( new Burbuja( 600, 90, 45 ) );
@@ -215,14 +218,14 @@ public class TestHerencia {
 				// e.animar( deltaTime );  // ¿Por qué no puede hacerse esto 
 					// si tanto las burbujas como los planetas se pueden animar?
 				if (e instanceof Planeta) {
-					((Planeta) e).animar( deltaTime );
+					((Planeta) e).animar( deltaTime );  // da igual: Planeta p = (Planeta) e; p.animar(deltaTime);
 				} else if (e instanceof Burbuja) {
 					((Burbuja) e).animar( deltaTime );
 				}
 			}
 			v.borra();
 			for (Esfera e : lEsferas) {
-				e.dibujar( v );
+				e.dibujar( v );  // sin embargo, sí que se puede dibujar
 			}
 			v.repaint();
 		}
