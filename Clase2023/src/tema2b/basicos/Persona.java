@@ -25,26 +25,27 @@ public class Persona implements Comparable<Persona> {  // Interfaz con genericid
 		System.out.println( l );
 	}
 
-	//  Interfaz Comparable
+	//  Interfaz Comparable - sin genericidad - requiere instanceof y cast
 //	@Override
 //	public int compareTo(Object o) {
 //		// TODO Auto-generated method stub
-//		return 0;
+//		if (o instanceof Persona) 
+//			((Persona) o)...
+//			...
 //	}
 	
-	// Interfaz Comparable<Persona>
+	// Interfaz Comparable<Persona> - con genericidad - especializado
 	@Override
 	public int compareTo(Persona o) {
 		// objeto this y objeto o --> negativo si this < o, 0 si this==o, + si this > o
 		// Orden natural: decidimos dni
+		
 	}
 	
 	@Override
 	public String toString() {
 		return "" + dniNumero + dniLetra + ": " + nombre + " " + apellidos;
 	}
-	
-	
 	
 	private int dniNumero;
 	private char dniLetra;
