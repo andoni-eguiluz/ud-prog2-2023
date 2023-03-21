@@ -12,16 +12,22 @@ public class Persona implements Comparable<Persona> {  // Interfaz con genericid
 	 */
 	public static void main(String[] args) {
 		Persona p1 = new Persona( 11111111, 'c', "Andoni", "Pérez" );
-		Persona p2 = new Persona( 22222222, 'd', "Luis", "González" );
-		Persona p3 = new Persona( 33333333, 'e', "María", "Ruiz" );
+		Persona p2 = new Persona( 22222222, 'd', "María", "González" );
+		Persona p3 = new Persona( 33333333, 'e', "luis", "Ruiz" );
+		Persona p4 = new Persona( 44444444, 'f', "María", "Arqués" );
 		ArrayList<Persona> l = new ArrayList<>();
-		l.add( p1 );
-		l.add( p2 );
+		l.add( p4 );
 		l.add( p3 );
+		l.add( p2 );
+		l.add( p1 );
 		// Otra manera:
 		// ArrayList<Persona> l2 = new ArrayList<>( Arrays.asList( p1, p2, p3 ) );
 		System.out.println( l );
 		l.sort( null );
+		System.out.println( l );
+		System.out.println( "o".compareTo( "ñ" ));
+		// Probemos a ordenar por nombre
+		l.sort( new ComparadorNombreYApellidos() );
 		System.out.println( l );
 	}
 
@@ -39,7 +45,17 @@ public class Persona implements Comparable<Persona> {  // Interfaz con genericid
 	public int compareTo(Persona o) {
 		// objeto this y objeto o --> negativo si this < o, 0 si this==o, + si this > o
 		// Orden natural: decidimos dni
-		
+		// Manera 1: lo más intuitivo
+//		System.out.println( this + " / " + o );
+//		if (this.dniNumero < o.dniNumero) {
+//			return -1;
+//		} else if (this.dniNumero == o.dniNumero) {
+//			return 0;
+//		} else {
+//			return +1;
+//		}
+		// Manera 2: la más eficiente
+		return this.dniNumero - o.dniNumero;
 	}
 	
 	@Override
