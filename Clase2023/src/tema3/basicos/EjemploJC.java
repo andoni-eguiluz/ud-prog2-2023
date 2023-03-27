@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class EjemploJC {
 	public static void main(String[] args) {
-		pruebasJCconStrings();
+		// pruebasJCconStrings();
 		pruebasJCconClasesPropias();
 	}
 

@@ -16,4 +16,17 @@ public class Pelicula {
 	public String toString() {
 		return nombre;
 	}
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Pelicula) {
+			Pelicula peli2 = (Pelicula) obj;
+			return nombre.equals( peli2.nombre );
+		} else {
+			return false;
+		}
+	}
+	@Override
+	public int hashCode() {
+		return nombre.hashCode();
+	}
 }
