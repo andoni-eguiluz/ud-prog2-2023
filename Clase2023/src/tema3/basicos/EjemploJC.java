@@ -7,8 +7,8 @@ import java.util.*;
  */
 public class EjemploJC {
 	public static void main(String[] args) {
-		// pruebasJCconStrings();
-		pruebasJCconClasesPropias();
+		pruebasJCconStrings();
+		// pruebasJCconClasesPropias();
 	}
 
 	private static void pruebasJCconClasesPropias() {
@@ -31,7 +31,7 @@ public class EjemploJC {
 			arraylist.add( p );
 		}
 		System.out.println( "ArrayList: " + arraylist );
-		if (arraylist.contains( new Pelicula("Elvis") )) {
+		if (arraylist.contains( new Pelicula( "Elvis" ) )) {
 			System.out.println( "Elvis está en la lista" );
 		} else {
 			System.out.println( "Elvis NO está en la lista" );
@@ -200,15 +200,19 @@ public class EjemploJC {
 			}
 		}
 		System.out.println( "Ganadora: " + peliMax + " con " + maxVotos );
-		
+		System.out.println( arraylist );
 		// Ejercicio: sacar de cada peli los "jueces" que la han votado
 		Map<String,ArrayList<Integer>> mapaVotos = new TreeMap<>();
 		for (int i=0; i<peliculas.length; i++) {
 			String peli = peliculas[i];
 			if (!mapaVotos.containsKey(peli)) {
 				mapaVotos.put( peli, new ArrayList<>() );
+//				mapaVotos.get( peli ).add( i );  // Añade el "juez"
+//			} else {
+//				mapaVotos.get( peli ).add( i );  // Añade el "juez"
 			}
 			mapaVotos.get( peli ).add( i );  // Añade el "juez"
+			System.out.println( mapaVotos );
 		}
 		for (String peli : mapaVotos.keySet()) {
 			System.out.println( "Película " + peli + " votada por: " + mapaVotos.get(peli) );

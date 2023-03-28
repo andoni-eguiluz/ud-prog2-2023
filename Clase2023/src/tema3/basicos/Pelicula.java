@@ -7,7 +7,7 @@ package tema3.basicos;
  * - Un TreeSet o como clave de un TreeMap
  * @author andoni.eguiluz at ingenieria.deusto.es
  */
-public class Pelicula {
+public class Pelicula implements Comparable<Pelicula> {
 	private String nombre;
 	public Pelicula( String nombre ) {
 		this.nombre = nombre;
@@ -29,4 +29,12 @@ public class Pelicula {
 	public int hashCode() {
 		return nombre.hashCode();
 	}
+	
+	@Override
+	public int compareTo(Pelicula peli2) {
+		// System.out.println( "comparando " + this + " con " + peli2 );
+		return -nombre.compareTo( peli2.nombre );
+	}
+	
+	
 }
