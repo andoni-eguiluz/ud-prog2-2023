@@ -1,9 +1,8 @@
 package tema4.conceptoFicheros.resueltos;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /** Ejemplo para aprender a hacer ficheros binarios y de texto
  * con una pequeña jerarquía Usuario / UsuarioDePago / UsuarioGratis
@@ -36,17 +35,46 @@ public class EjemploFicherosDeHerencia {
 			oos.close();
 		} catch (IOException e) {
 			System.out.println( "No se ha podido escribir el fichero de usuarios binario" );
+			e.printStackTrace();
 		}
 	}
+	/** Lee el fichero binario
+	 * @return	Devuelve la lista de usuarios del fichero, o null si hay error
+	 */
 	private static ArrayList<Usuario> cargarUsuariosEnFicheroBinario() {
-		// TODO
-		return null;
+		try {
+			ObjectInputStream ois = new ObjectInputStream( new FileInputStream( "usuarios.dat" ) );
+			ArrayList<Usuario> l = (ArrayList<Usuario>) ois.readObject();
+			ois.close();
+			return l;
+		} catch (IOException | ClassNotFoundException | ClassCastException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	private static void guardarUsuariosEnFicheroDeTexto() {
-		// TODO
+		File fic = new File( "data" );
+		fic.mkdir();
+		try (PrintStream ps = new PrintStream( "data/usuarios.txt" )) {
+			for (Usuario usuario : lUsuarios) {
+				ps.println( usuario.aLinea() );
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println( "Error en gestión de fichero" );
+			e.printStackTrace();
+		}
 	}
 	private static ArrayList<Usuario> cargarUsuariosEnFicheroDeTexto() {
-		// TODO
+		try (Scanner scanner = new Scanner( new FileInputStream( "data/usuarios.txt" ) )) {
+			ArrayList<Usuario> l = new ArrayList<>();
+			while (scanner.hasNextLine()) {
+				String linea = scanner.nextLine();
+				Usuario usuario = Usuario.crearDesdeLinea( linea );
+			}
+			return l;
+		} catch (FileNotFoundException e) {
+			
+		}
 		return null;
 	}
 	
@@ -54,10 +82,11 @@ public class EjemploFicherosDeHerencia {
 
 
 
-abstract class Usuario {
-	private String nick;
-	private Password password;
-	private String passwordAsteriscos;
+abstract class Usuario implements Serializable {
+	private static final long serialVersionUID = 1L;
+	protected String nick;
+	protected Password password;
+	private /*transient*/ String passwordAsteriscos;
 	public Usuario(String nick, Password password) {
 		this.nick = nick; this.password = password;
 		passwordAsteriscos = password.toString();
@@ -65,9 +94,21 @@ abstract class Usuario {
 	public String getNick() { return nick; }
 	public Password getPassword() { return password; }
 	@Override public String toString() { return nick + " " + passwordAsteriscos; }
+	public abstract String aLinea();
+	
+	public static Usuario crearDesdeLinea( String linea ) {
+		// TODO Pendiente: hacer crearDesdeLinea en clases hijas
+		Usuario ret = UsuarioDePago.crearDesdeLinea( linea );
+		if (ret!=null) {
+			return ret;
+		}
+		ret = UsuarioGratis.crearDesdeLinea( linea );
+		return ret;
+	}
 }
 
-class UsuarioDePago extends Usuario {
+class UsuarioDePago extends Usuario { // implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private double cuota;
 	public UsuarioDePago(String nick, Password password, double cuota) {
 		super(nick, password);
@@ -75,9 +116,15 @@ class UsuarioDePago extends Usuario {
 	}
 	public double getCuota() { return cuota; }
 	@Override public String toString() { return super.toString() + " " + cuota; }
+
+	@Override
+	public String aLinea() {
+		return "DEPAGO\t" + nick + "\t" + password.getPassword() + "\t" + cuota;
+	}
 }
 
-class UsuarioGratis extends Usuario {
+class UsuarioGratis extends Usuario implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private int numAnuncios;
 	public UsuarioGratis(String nick, Password password, int numAnuncios) {
 		super(nick, password);
@@ -85,9 +132,15 @@ class UsuarioGratis extends Usuario {
 	}
 	public int getNumAnuncios() { return numAnuncios; }
 	@Override public String toString() { return super.toString() + " " + numAnuncios; }
+
+	@Override
+	public String aLinea() {
+		return "GRATIS\t" + nick + "\t" + password.getPassword() + "\t" + numAnuncios;
+	}
 }
 
-class Password {
+class Password implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String password;
 	public Password(String password) {
 		super();
