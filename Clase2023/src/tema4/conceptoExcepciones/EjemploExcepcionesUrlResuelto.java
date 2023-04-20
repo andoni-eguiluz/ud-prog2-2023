@@ -21,7 +21,9 @@ public class EjemploExcepcionesUrlResuelto {
 	 * @param charset	Juego de caracteres (para tildes y caracteres especiales)
 	 * @return	Lista de todas las líneas que contienen ese String (vacía si no hay ninguna)
 	 */
-	public static ArrayList<String> buscaEnWeb( String url, String busqueda, String charset ) {
+	public static ArrayList<String> buscaEnWeb( String url, String busqueda, String charset )
+			throws MalformedURLException, IOException, UnknownHostException, FileNotFoundException, ConnectException
+	{
 		// TODO Pendiente gestionar errores directos con devuelveTodasLasLineas
 		ArrayList<String> lineas = devuelveTodasLasLineas( url, charset );
 		// System.out.println( "Intentando entrar en web " + url + " - lineas " + lineas );
@@ -75,35 +77,49 @@ public class EjemploExcepcionesUrlResuelto {
 	}
 
 	public static void main(String[] args) {
-		try {
-			sacarTiempoEnCiudadesDePrimera();
-		} catch (NullPointerException e) {
-			System.out.println( "No ha sido posible conectarse con la lista de equipos. Inténtalo después" );
+		// Con reintentos múltiples
+		long tiempo = System.currentTimeMillis();
+		while (System.currentTimeMillis()-tiempo < 5000) {
+			try {
+				sacarTiempoEnCiudadesDePrimera();
+				break;
+			} catch (IOException e) {
+				System.out.println( "No ha sido posible conectarse con la lista de equipos. Inténtalo después" );
+			}
+			
 		}
 	}
 	
-	private static void sacarTiempoEnCiudadesDePrimera() {
+	private static void sacarTiempoEnCiudadesDePrimera() throws IOException {
 		// De partida hemos explorado la web www.marca.com y vemos que
 		// En la página https://www.marca.com/futbol/primera-division/calendario.html
 		// Siempre está el calendario de la liga, y en él hay muchas líneas con la forma
 		// <img src="https://e00-marca.uecdn.es/assets/sports ... alt="Girona"/>
 		// Y el charset es iso-8859-15   (<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15"/>)
 		// Hipótesis: buscamos todas esas líneas y encontraremos los equipos
-		ArrayList<String> lineas = buscaEnWeb( "https://www.marca.com/futbol/primera-division/calendario.html", "<img src=\"https://e00-marca.uecdn.es/assets/sports", "iso-8859-15" );
-		ArrayList<String> equipos = new ArrayList<>();
-		for (String linea : lineas) {
-			int pos1 = linea.indexOf( "alt=" );
-			int pos2 = linea.indexOf( "\"", pos1+5 );
-			if (pos1!=-1 && pos2!=-1) {
-				equipos.add( linea.substring( pos1+5, pos2 ) );
+		// try {  // Si quisiéramos gestionar el error aquí
+			ArrayList<String> lineas = buscaEnWeb( "https://www.marca.com/futbol/primera-division/calendario.html", "<img src=\"https://e00-marca.uecdn.es/assets/sports", "iso-8859-15" );
+			ArrayList<String> equipos = new ArrayList<>();
+			for (String linea : lineas) {
+				int pos1 = linea.indexOf( "alt=" );
+				int pos2 = linea.indexOf( "\"", pos1+5 );
+				if (pos1!=-1 && pos2!=-1) {
+					equipos.add( linea.substring( pos1+5, pos2 ) );
+				}
 			}
-		}
-		quitaRepetidos( equipos );
-		System.out.println( "Lista de equipos: " + equipos );
-		for (String equipo : equipos) {
-			// System.out.println( "Equipo en proceso: " + equipo );
-			visualizaEquipo( equipo );
-		}
+			quitaRepetidos( equipos );
+			System.out.println( "Lista de equipos: " + equipos );
+			for (String equipo : equipos) {
+				// System.out.println( "Equipo en proceso: " + equipo );
+				visualizaEquipo( equipo );
+			}
+		// Si hiciéramos el catch aquí
+		// } catch (MalformedURLException | UnknownHostException | FileNotFoundException | ConnectException e) {
+		// } catch (IOException e) {
+		// O bien coger el general
+		// } catch (Exception e) {
+		//	System.out.println( "No ha sido posible la conexión - no se pueden sacar los tiempos");
+		//}
 	}
 	
 	private static void quitaRepetidos( ArrayList<String> equipos ) {
@@ -120,6 +136,20 @@ public class EjemploExcepcionesUrlResuelto {
 			System.out.println( "Equipo " + equipo + " - temperatura " + grados + "º" );
 		} catch (NullPointerException exc) {
 			System.out.println( "No hay ciudad con el mismo nombre que el equipo " + equipo + " o la web de tiempo.com no funciona");
+			exc.printStackTrace();
+		} catch (IndexOutOfBoundsException exc) {
+			System.out.println( "Excepción diferente (no va a ocurrir)");
+//		} catch (MalformedURLException | UnknownHostException | FileNotFoundException | ConnectException e) {
+		} catch (IOException e) {
+		// } catch (Exception e) {
+			System.out.println( "No hay ciudad con el mismo nombre que el equipo " + equipo + " o la web no funciona" );
+//			// Intento solucionarlo...
+//			// ...
+//			// no lo soluciono: 1) generar un error
+//			// throw new NullPointerException( "Otro error" );
+//			// ...
+//			// 2) relanzar el mismo error
+//			throw e;
 		}
 	}
 	
@@ -129,7 +159,9 @@ public class EjemploExcepcionesUrlResuelto {
 		return texto.replaceAll( "á", "a" ).replaceAll( "é", "e" ).replaceAll( "í", "i" ).replaceAll( "ó", "o" ).replaceAll( "ú", "u" );
 	}
 	
-	private static int getGradosDeCiudad( String ciudad ) {
+	private static int getGradosDeCiudad( String ciudad ) 
+			throws MalformedURLException, IOException, UnknownHostException, FileNotFoundException, ConnectException	
+	{
 		// De partida hemos explorado la web eltiempo.es y vemos que
 		// Suele haber una URL  https://www.eltiempo.es/madrid.html   (con el nombre de la ciudad)
 		// Y suele haber una línea que indica los grados:
