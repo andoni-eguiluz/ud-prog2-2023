@@ -70,6 +70,9 @@ public class EjemploFicherosDeHerencia {
 			while (scanner.hasNextLine()) {
 				String linea = scanner.nextLine();
 				Usuario usuario = Usuario.crearDesdeLinea( linea );
+				if (usuario!=null) {
+					l.add( usuario );
+				}
 			}
 			return l;
 		} catch (FileNotFoundException e) {
@@ -79,7 +82,6 @@ public class EjemploFicherosDeHerencia {
 	}
 	
 }
-
 
 
 abstract class Usuario implements Serializable {
@@ -96,8 +98,12 @@ abstract class Usuario implements Serializable {
 	@Override public String toString() { return nick + " " + passwordAsteriscos; }
 	public abstract String aLinea();
 	
+	/** Crea un nuevo usuario desde una línea de texto, probando cada una de las clases hijas
+	 * UsuarioDePago y UsuarioGratis para comprobar a qué clase pertenecen los datos
+	 * @param linea	Línea de texto que contiene los datos de un usuario
+	 * @return	Nuevo usuario con datos de la línea de texto, null si hay cualquier error 
+	 */
 	public static Usuario crearDesdeLinea( String linea ) {
-		// TODO Pendiente: hacer crearDesdeLinea en clases hijas
 		Usuario ret = UsuarioDePago.crearDesdeLinea( linea );
 		if (ret!=null) {
 			return ret;
@@ -121,6 +127,29 @@ class UsuarioDePago extends Usuario { // implements Serializable {
 	public String aLinea() {
 		return "DEPAGO\t" + nick + "\t" + password.getPassword() + "\t" + cuota;
 	}
+	/** Devuelve nuevo usuario de pago partiendo de texto
+	 * @param linea	Línea de texto a interpretar. Formato tipo \t nick \t password \t cuota
+	 * @return	Nuevo usuario con esos datos, o null si hay cualquier error
+	 */
+	public static UsuarioDePago crearDesdeLinea( String linea ) {
+		try {
+			String[] partes = linea.split("\t");
+			if (!partes[0].equals("DEPAGO")) {
+				return null;
+			}
+			if (partes.length>4) {
+				System.err.println( "Error en línea: demasiadas partes - " + linea );
+				return null;
+			}
+			return new UsuarioDePago( partes[1], new Password( partes[2] ), Double.parseDouble( partes[3] ) );
+		} catch (NumberFormatException e) {
+			System.err.println( "Error en línea: tercer valor no es double - " + linea );
+			return null;
+		} catch (IndexOutOfBoundsException e) {
+			System.err.println( "Error en línea: número incorrecto de partes - " + linea );
+			return null;
+		}
+	}
 }
 
 class UsuarioGratis extends Usuario implements Serializable {
@@ -136,6 +165,29 @@ class UsuarioGratis extends Usuario implements Serializable {
 	@Override
 	public String aLinea() {
 		return "GRATIS\t" + nick + "\t" + password.getPassword() + "\t" + numAnuncios;
+	}
+	/** Devuelve nuevo usuario gratis partiendo de texto
+	 * @param linea	Línea de texto a interpretar. Formato tipo \t nick \t password \t cuota
+	 * @return	Nuevo usuario con esos datos, o null si hay cualquier error
+	 */
+	public static UsuarioGratis crearDesdeLinea( String linea ) {
+		try {
+			String[] partes = linea.split("\t");
+			if (!partes[0].equals("GRATIS")) {
+				return null;
+			}
+			if (partes.length>4) {
+				System.err.println( "Error en línea: demasiadas partes - " + linea );
+				return null;
+			}
+			return new UsuarioGratis( partes[1], new Password( partes[2] ), Integer.parseInt( partes[3] ) );
+		} catch (NumberFormatException e) {
+			System.err.println( "Error en línea: tercer valor no es int - " + linea );
+			return null;
+		} catch (IndexOutOfBoundsException e) {
+			System.err.println( "Error en línea: número incorrecto de partes - " + linea );
+			return null;
+		}
 	}
 }
 
