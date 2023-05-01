@@ -38,7 +38,7 @@ public class Ventana5a4 extends JFrame {
 		JLabel lTitulo = new JLabel( "Ventana super útil" );
 		JButton bCancelar = new JButton( "¡Cancela!" );
 		JButton bAdelante = new JButton( "A por ello" );
-		JTextArea taTexto = new JTextArea( 10, 10 );
+		JTextArea taTexto = new JTextArea();
 		JButton[] bTeclas = new JButton[12];
 		String sTeclas = "123456789<0*";
 		for (int i=0; i<sTeclas.length(); i++) {
@@ -64,6 +64,7 @@ public class Ventana5a4 extends JFrame {
 		pIzq1.setMaximumSize( new Dimension( 300, 35 ) );
 		pIzq2.setMaximumSize( new Dimension( 300, 35 ) );
 		pIzq3.setMaximumSize( new Dimension( 300, 35 ) );
+		setMinimumSize( new Dimension( 500, 250 ) );
 		
 		// 4. Formato de componentes
 		lTitulo.setFont( new Font( "Arial", Font.BOLD, 24 ) );
