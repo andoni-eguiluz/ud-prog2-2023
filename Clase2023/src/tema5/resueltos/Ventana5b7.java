@@ -19,6 +19,7 @@ public class Ventana5b7 extends JFrame {
 	}
 	
 	private JLabel lTitulo;
+	private JTextField tfCodPostal;
 	
 	// No static 
 	public Ventana5b7() {
@@ -51,9 +52,9 @@ public class Ventana5b7 extends JFrame {
 		JLabel lLogo = new JLabel( new ImageIcon( "src/tema5/ejercicios/UD-blue-peq.png" ) );
 		JComboBox<String> cbTipo = new JComboBox<>( new String[] { "Creativx", "Organizadx", "Disciplinadx", "Dinámicx" } );
 		JLabel lNombre = new JLabel( "Nombre:" );
-		JTextField tfNombre = new JTextField( "<Nombre>", 15 );
+		final JTextField tfNombre = new JTextField( "<Nombre>", 15 );
 		JLabel lCodPostal = new JLabel( "Cod.Postal:" );
-		JTextField tfCodPostal = new JTextField( 8 );
+		tfCodPostal = new JTextField( 8 );
 		JCheckBox checkUrgente = new JCheckBox( "Urgente" );
 		
 		// 3. Formato de contenedores
@@ -105,9 +106,51 @@ public class Ventana5b7 extends JFrame {
 		pIzq3.add( checkUrgente );
 		
 		// 6. Gestión de eventos
+		// a) Clase externa
 		// ActionListener escuchador = new EscuchadorBotonCancelar();
 		// bCancelar.addActionListener( new EscuchadorBotonCancelar( lTitulo ) );
+		// b) Clase interna
 		bCancelar.addActionListener( new EscuchadorBotonCancelarInterna() );
+		// c) Clase interna anónima
+		ActionListener al = 
+			new /* clase sin nombre implements */ ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					System.out.println( "Pulsado!" );
+					lTitulo.setText( "Ventana cancelada" );
+				}
+			}
+		;
+		bCancelar.addActionListener( al );
+		// Seguimos con internas anónimas
+		bAdelante.addActionListener( new ActionListener() {
+			/* private JTextField tfNombre = tfNombre */
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println( "Pulsado adelante");
+				tfNombre.setText( "hola" );
+			}
+		});
+		System.out.println( "Fin constructor" );
+		tfNombre.addFocusListener( new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				System.out.println( "lost" );
+				if (tfNombre.getText().equals("<Nombre>") || tfNombre.getText().isEmpty()) {
+					bAdelante.setEnabled( false );
+				} else {
+					bAdelante.setEnabled( true );
+				}
+			}
+			@Override
+			public void focusGained(FocusEvent e) {
+				System.out.println( "gain" );
+			}
+		} );
+	}
+	
+	public String getValorCodPostal() {
+		return tfCodPostal.getText();
 	}
 
 	// Clase interna
