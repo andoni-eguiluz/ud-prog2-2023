@@ -147,6 +147,75 @@ public class Ventana5b7 extends JFrame {
 				System.out.println( "gain" );
 			}
 		} );
+		// Prueba de mouse listener
+		// ¿Podemos dibujar una línea entre pulsación y suelta?
+		lLogo.addMouseListener( new MouseListener() {
+			private Point puntoPulsacion = null;
+			@Override
+			public void mousePressed(MouseEvent e) {
+				System.out.println( "pressed " + e );
+				puntoPulsacion = e.getPoint();
+				// Añadir gestores de eventos en caliente?  Se puede pero con cuidado:
+				// (esto añadiría varios gestores de eventos si se hace varias veces)
+//				tfNombre.addActionListener( new ActionListener() {
+//					@Override
+//					public void actionPerformed(ActionEvent e) {
+//						System.out.println( "Gestor de eventos nuevo!!!");
+//					}
+//				});
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				System.out.println( "released " + e );
+				lLogo.getGraphics().setColor( Color.RED );
+				lLogo.getGraphics().drawLine( puntoPulsacion.x, puntoPulsacion.y, e.getX(), e.getY() );
+				Graphics g = lLogo.getGraphics();
+				g.setColor( Color.RED );
+				g.drawLine( puntoPulsacion.x, puntoPulsacion.y, e.getX(), e.getY() );
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				System.out.println( "exited " + e );
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				System.out.println( "entered " + e.getPoint() + " " + e.getLocationOnScreen() + " " + e.getSource() );
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println( "clicked " + e );
+			}
+		} );
+		// Programación de click de mouse listener para código postal 48007 al hacer click en el label
+		lCodPostal.addMouseListener( new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				tfCodPostal.setText( "48007" );
+				long tiempo = System.currentTimeMillis();
+				// Nunca nada que tarde tiempo
+				// while (System.currentTimeMillis() - tiempo < 5000) {
+					// tarda 2 sgs
+				// }
+			}
+		});
+		// Línea continua amarilla con el movimiento de ratón
+		lLogo.addMouseMotionListener( new MouseMotionListener() {
+			Point puntoAnterior = null;
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				System.out.println( "move " + e.getPoint() );
+			}
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				System.out.println( "drag " + e.getPoint() );
+				if (puntoAnterior!=null) {
+					Graphics g = lLogo.getGraphics();
+					g.setColor( Color.YELLOW );
+					g.drawLine( puntoAnterior.x, puntoAnterior.y, e.getX(), e.getY() );
+				}
+				puntoAnterior = e.getPoint();
+			}
+		});
 	}
 	
 	public String getValorCodPostal() {
