@@ -199,12 +199,12 @@ public class Ventana5b7 extends JFrame {
 			}
 		});
 		// Línea continua amarilla con el movimiento de ratón
-		lLogo.addMouseMotionListener( new MouseMotionListener() {
+		MouseAdapter ma = new MouseAdapter() {
 			Point puntoAnterior = null;
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				System.out.println( "move " + e.getPoint() );
-			}
+//			@Override
+//			public void mouseMoved(MouseEvent e) {
+//				System.out.println( "move " + e.getPoint() );
+//			}
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				System.out.println( "drag " + e.getPoint() );
@@ -214,6 +214,31 @@ public class Ventana5b7 extends JFrame {
 					g.drawLine( puntoAnterior.x, puntoAnterior.y, e.getX(), e.getY() );
 				}
 				puntoAnterior = e.getPoint();
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				puntoAnterior = null;
+			}
+			
+		};
+		lLogo.addMouseMotionListener( ma );
+		lLogo.addMouseListener( ma );
+		// KeyListener
+		tfCodPostal.addKeyListener( new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				System.out.println( "KT " + e );
+				if (e.getKeyChar()<'0' || e.getKeyChar()>'9') {
+					e.consume();
+				}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				System.out.println( "KR " + e );
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				System.out.println( "KP " + e );
 			}
 		});
 	}
