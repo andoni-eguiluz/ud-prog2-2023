@@ -24,7 +24,7 @@ public class Ventana5b7 extends JFrame {
 	// No static 
 	public Ventana5b7() {
 		// Inicialización de la ventana
-		setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+		setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
 		setSize( 600, 400 );
 		setAlwaysOnTop( true );
 		setLocationRelativeTo( null );
@@ -227,8 +227,10 @@ public class Ventana5b7 extends JFrame {
 		tfCodPostal.addKeyListener( new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
+				System.out.println( e.getSource() );
 				System.out.println( "KT " + e );
-				if (e.getKeyChar()<'0' || e.getKeyChar()>'9') {
+				if (e.getKeyChar()<'0' || e.getKeyChar()>'9' || tfCodPostal.getText().length()==5) {
+					// Character.isDigit también valdría
 					e.consume();
 				}
 			}
@@ -239,6 +241,64 @@ public class Ventana5b7 extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				System.out.println( "KP " + e );
+			}
+		});
+		KeyAdapter ka = new KeyAdapter() {
+			private boolean shiftPulsado = false;
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode()==KeyEvent.VK_SHIFT) {
+					shiftPulsado = true;
+				}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				System.out.println( "Released " + e );
+				if (e.getKeyCode()==KeyEvent.VK_ESCAPE && shiftPulsado) { // NOOOOOO  && e.getKeyCode()==KeyEvent.VK_SHIFT) {
+					// También se podría usar e.isShiftDown ... isControlDown... etc.
+					if (e.getSource() instanceof JTextField) {
+						JTextField tf = (JTextField) e.getSource();
+						tf.setText( "" );
+					}
+				} else if (e.getKeyCode()==KeyEvent.VK_SHIFT) {
+					shiftPulsado = false;
+				}
+			}
+		};
+		tfCodPostal.addKeyListener( ka );
+		tfNombre.addKeyListener( ka );
+		this.addWindowListener( new WindowListener() {
+			@Override
+			public void windowOpened(WindowEvent e) {
+				System.out.println( "OPEN" );
+			}
+			@Override
+			public void windowClosing(WindowEvent e) {
+				System.out.println( "CLOSING" );
+				int resp = JOptionPane.showConfirmDialog( null, "Quieres cerrar?", "Cierre", JOptionPane.YES_NO_OPTION );
+				if (resp==JOptionPane.OK_OPTION) {
+					Ventana5b7.this.dispose();
+				}
+			}
+			@Override
+			public void windowClosed(WindowEvent e) {
+				System.out.println( "CLOSED" );
+			}
+			@Override
+			public void windowIconified(WindowEvent e) {
+				System.out.println( "ICON" );
+			}
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				System.out.println( "DEICON" );
+			}
+			@Override
+			public void windowActivated(WindowEvent e) {
+				System.out.println( "ACTIV" );
+			}
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				System.out.println( "DEACTIV" );
 			}
 		});
 	}
