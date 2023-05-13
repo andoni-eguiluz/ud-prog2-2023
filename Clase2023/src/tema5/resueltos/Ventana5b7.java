@@ -275,7 +275,7 @@ public class Ventana5b7 extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				System.out.println( "CLOSING" );
-				int resp = JOptionPane.showConfirmDialog( null, "Quieres cerrar?", "Cierre", JOptionPane.YES_NO_OPTION );
+				int resp = JOptionPane.showConfirmDialog( Ventana5b7.this, "Quieres cerrar?", "Cierre", JOptionPane.YES_NO_OPTION );
 				if (resp==JOptionPane.OK_OPTION) {
 					Ventana5b7.this.dispose();
 				}
