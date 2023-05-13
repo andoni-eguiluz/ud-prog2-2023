@@ -301,6 +301,14 @@ public class Ventana5b7 extends JFrame {
 				System.out.println( "DEACTIV" );
 			}
 		});
+		taTexto.addComponentListener( new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				int nuevaAltura = taTexto.getWidth()/10;
+				taTexto.setFont( new Font( "Arial", Font.PLAIN, nuevaAltura ) );
+				System.out.println( "Cambio altura: " + nuevaAltura );
+			}
+		});
 	}
 	
 	public String getValorCodPostal() {
