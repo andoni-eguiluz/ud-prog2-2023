@@ -81,11 +81,12 @@ public class Ventana5b7 extends JFrame {
 		lNombre.setBackground( Color.ORANGE );
 		lNombre.setOpaque( true );
 		tfCodPostal.setBackground( Color.YELLOW );
+		JScrollPane spCentral = new JScrollPane( taTexto );
 		
 		// 5. Añadir componentes a contenedores
 		getContentPane().add( pSuperior, BorderLayout.NORTH );
 		getContentPane().add( pInferior, BorderLayout.SOUTH );
-		getContentPane().add( new JScrollPane( taTexto ), BorderLayout.CENTER );
+		getContentPane().add( spCentral, BorderLayout.CENTER );
 		getContentPane().add( pDerecho, BorderLayout.EAST );
 		getContentPane().add( pIzquierdo, BorderLayout.WEST );
 		pSuperior.add( lTitulo );
