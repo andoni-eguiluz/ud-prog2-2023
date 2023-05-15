@@ -8,13 +8,13 @@ import javax.swing.*;
  * @author andoni.eguiluz @ ingenieria.deusto.es
  */
 @SuppressWarnings("serial")
-public class Ventana5b8ConHilos extends JFrame {
+public class Ventana5b7ConHilos extends JFrame {
 
 	/** Método de prueba de la ventana del ejercicio 5a.4
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Ventana5b8ConHilos vent = new Ventana5b8ConHilos();
+		Ventana5b7ConHilos vent = new Ventana5b7ConHilos();
 		vent.setVisible( true );
 	}
 	
@@ -22,7 +22,7 @@ public class Ventana5b8ConHilos extends JFrame {
 	private JTextField tfCodPostal;
 	
 	// No static 
-	public Ventana5b8ConHilos() {
+	public Ventana5b7ConHilos() {
 		// Inicialización de la ventana
 		setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
 		setSize( 600, 400 );
@@ -278,9 +278,9 @@ public class Ventana5b8ConHilos extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				System.out.println( "CLOSING" );
-				int resp = JOptionPane.showConfirmDialog( Ventana5b8ConHilos.this, "Quieres cerrar?", "Cierre", JOptionPane.YES_NO_OPTION );
+				int resp = JOptionPane.showConfirmDialog( Ventana5b7ConHilos.this, "Quieres cerrar?", "Cierre", JOptionPane.YES_NO_OPTION );
 				if (resp==JOptionPane.OK_OPTION) {
-					Ventana5b8ConHilos.this.dispose();
+					Ventana5b7ConHilos.this.dispose();
 				}
 			}
 			@Override
