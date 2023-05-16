@@ -47,7 +47,7 @@ public class VentanaEdicion extends JFrame {
 		tfHoraFin.setMaximumSize( new Dimension( 200, 30 ) );
 		taEjercicioDia.setText( datos.getDatosEjercicio( dia ) );
 		tfHoraInicio.setText( datos.getHoraIni( dia ) );
-		tfHoraInicio.setText( datos.getHoraFin( dia ) );
+		tfHoraFin.setText( datos.getHoraFin( dia ) );
 		
 		// 5. Añadir componentes a contenedores
 		getContentPane().add( pIzquierdo, BorderLayout.WEST );
