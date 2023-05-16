@@ -2,6 +2,9 @@ package tema5.resueltos;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.swing.*;
 
 /** Solución ejercicio 5a.4
@@ -44,6 +47,7 @@ public class Ventana5b7ConHilos extends JFrame {
 		JButton bCancelar = new JButton( "¡Cancela!" );
 		JButton bAdelante = new JButton( "A por ello" );
 		JButton bCambioColor = new JButton( "Cambia color edición" );
+		JButton bCrono = new JButton( "Crono" );
 		JTextArea taTexto = new JTextArea();
 		JButton[] bTeclas = new JButton[12];
 		String sTeclas = "123456789<0*";
@@ -91,6 +95,7 @@ public class Ventana5b7ConHilos extends JFrame {
 		getContentPane().add( pDerecho, BorderLayout.EAST );
 		getContentPane().add( pIzquierdo, BorderLayout.WEST );
 		pSuperior.add( lTitulo );
+		pInferior.add( bCrono );
 		pInferior.add( bCancelar );
 		pInferior.add( bAdelante );
 		pInferior.add( bCambioColor );
@@ -280,7 +285,29 @@ public class Ventana5b7ConHilos extends JFrame {
 				System.out.println( "CLOSING" );
 				int resp = JOptionPane.showConfirmDialog( Ventana5b7ConHilos.this, "Quieres cerrar?", "Cierre", JOptionPane.YES_NO_OPTION );
 				if (resp==JOptionPane.OK_OPTION) {
-					Ventana5b7ConHilos.this.dispose();
+					// Manera 1 de crear hilos: Heredando Thread
+//					Thread hilo = new Thread() {
+//						public void run() {
+//							...
+//						}
+//					}
+					// Manera 2 de crear hilos: implementando Runnable
+					Runnable r = new Runnable() {
+						@Override
+						public void run() {
+							while (Ventana5b7ConHilos.this.getHeight() > 250) {
+								setSize( getWidth()-1, getHeight()-1 );
+								try {
+									Thread.sleep( 10 );
+								} catch (InterruptedException e1) {
+									e1.printStackTrace();
+								}
+							}
+							Ventana5b7ConHilos.this.dispose();
+						}
+					};
+					Thread hilo = new Thread( r );
+					hilo.start();
 				}
 			}
 			@Override
@@ -315,20 +342,18 @@ public class Ventana5b7ConHilos extends JFrame {
 		bCambioColor.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				bCambioColor.setEnabled( false );
 				System.out.println( "Empiezo a ejecutar el botón" );
 				Thread hilo = new Thread() {
 					@Override
 					public void run() {
 						System.out.println( "Empiezo a crear el hilo");
 						// Cambio gradual
-						int cambio = 0;
-						int color = 0;
+						int cambio = 0; int color = 0;
 						if (taTexto.getBackground().getBlue() == 0) {  // negro 0->255 blanco
-							cambio = +1;
-							color = 0;
+							cambio = +1; color = 0;
 						} else { // blanco
-							cambio = -1;
-							color = 255;
+							cambio = -1; color = 255;
 						}
 						for (int i=0; i<255; i++) {
 							color += cambio;
@@ -339,12 +364,41 @@ public class Ventana5b7ConHilos extends JFrame {
 								e1.printStackTrace();
 							}
 						}
+						bCambioColor.setEnabled( true );
 					}
 				};
 				// hilo.run();  // NO HAY MAGIA
 				hilo.start(); // MAGIA! Crea un nuevo hilo DE EJECUCION y le dice que ejecute run() hasta que acabe
+				System.out.println( "Acabo ejecución de botón");
 			}
 		} );
+		bCrono.addActionListener( new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Runnable tiempo = new Runnable() {
+					@Override
+					public void run() {
+						int conteo = 0;
+						while (true) {
+							SimpleDateFormat sdf = new SimpleDateFormat( "HH:mm:ss SSSS" );
+							lTitulo.setText( sdf.format( new Date() ));
+							conteo++;
+							if (conteo%10000==0) {
+								System.out.println( conteo );
+							}
+							try {
+								Thread.sleep(10);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				};
+				Thread hilo = new Thread( tiempo );
+				hilo.start();
+			}
+		});
+		System.out.println( "Acabado constructor" );
 	}
 
 	// Clase interna para el hilo - se podría hacer así...
