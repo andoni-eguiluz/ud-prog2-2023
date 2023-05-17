@@ -31,7 +31,7 @@ import javax.swing.border.EmptyBorder;
 public class EjemploInvoke extends JFrame implements ActionListener
 {
 	
-	private static boolean testNoMeDatiempo = true;
+	private static boolean testNoMeDatiempo = false;
 	public static void main(String[] args)
 	{
 		if (testNoMeDatiempo) {

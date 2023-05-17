@@ -13,16 +13,26 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class Ventana5b7ConHilos extends JFrame {
 
+	private static Ventana5b7ConHilos vent;
 	/** Método de prueba de la ventana del ejercicio 5a.4
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Ventana5b7ConHilos vent = new Ventana5b7ConHilos();
-		vent.setVisible( true );
+		SwingUtilities.invokeLater( new Runnable() {
+			@Override
+			public void run() {
+				vent = new Ventana5b7ConHilos();
+				vent.setVisible( true );
+				Ventana5b7ConHilos vent2 = new Ventana5b7ConHilos();
+				vent2.setVisible( true );
+			}
+		});
 	}
 	
 	private JLabel lTitulo;
 	private JTextField tfCodPostal;
+	private Thread hiloCrono;
+	private boolean acabaHiloCrono = false;
 	
 	// No static 
 	public Ventana5b7ConHilos() {
@@ -312,6 +322,11 @@ public class Ventana5b7ConHilos extends JFrame {
 			}
 			@Override
 			public void windowClosed(WindowEvent e) {
+				if (hiloCrono!=null) {
+					// hiloCrono.stop();  // Funciona aunque no se recomienda
+					// hiloCrono.interrupt();  // Funciona ok
+					acabaHiloCrono = true;
+				}
 				System.out.println( "CLOSED" );
 			}
 			@Override
@@ -375,27 +390,35 @@ public class Ventana5b7ConHilos extends JFrame {
 		bCrono.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				bCrono.setVisible(false);
 				Runnable tiempo = new Runnable() {
 					@Override
 					public void run() {
+						acabaHiloCrono = false;
 						int conteo = 0;
-						while (true) {
+						// while (true) {
+						while (!acabaHiloCrono) {
+							if (Thread.interrupted()) {
+								System.out.println( "Me han interrumpido" );
+								return;
+							}
 							SimpleDateFormat sdf = new SimpleDateFormat( "HH:mm:ss SSSS" );
 							lTitulo.setText( sdf.format( new Date() ));
 							conteo++;
-							if (conteo%10000==0) {
+							if (conteo%10==0) {
 								System.out.println( conteo );
 							}
 							try {
 								Thread.sleep(10);
 							} catch (InterruptedException e) {
-								e.printStackTrace();
+								// e.printStackTrace();
+								return;
 							}
 						}
 					}
 				};
-				Thread hilo = new Thread( tiempo );
-				hilo.start();
+				hiloCrono = new Thread( tiempo );
+				hiloCrono.start();
 			}
 		});
 		System.out.println( "Acabado constructor" );

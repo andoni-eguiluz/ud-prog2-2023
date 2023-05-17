@@ -52,8 +52,9 @@ public class HilosConProblemasConSwing extends JFrame {
 
 		// Pelea de hilos con swing: generar y borrar texto en un JTextArea
 		Thread hiloAnyade = new Thread() {
+			private char letra;
 			public void run() {
-				char letra = 'a';
+				letra = 'a';
 				while (true) {
 					try {
 						sleep(10);
@@ -61,19 +62,27 @@ public class HilosConProblemasConSwing extends JFrame {
 					if (pausa) {
 						continue;
 					}
-					taTexto.append( "" + letra );
+//					taTexto.append( "" + letra );
+					// TODO 4. ¿Lo soluciona? Probar si se hace el acceso desde Swing
+					// TODO 5. ¿Cómo resolver el problema del atributo que cambia?
+					SwingUtilities.invokeLater( new Runnable() {
+						@Override
+						public void run() {
+							taTexto.append( "" + letra );
+						}
+					});
 					letra = (char) (letra+1);
 					if (letra > 'z') {
 						letra = 'a';
 						// Acceso directo al componente desde el hilo
-						taTexto.append( "\n" );
+//						taTexto.append( "\n" );
 						// TODO 3. ¿Lo soluciona? Probar si se hace el acceso desde Swing
-//						SwingUtilities.invokeLater( new Runnable() {
-//							@Override
-//							public void run() {
-//								taTexto.append( "\n" );
-//							}
-//						});
+						SwingUtilities.invokeLater( new Runnable() {
+							@Override
+							public void run() {
+								taTexto.append( "\n" );
+							}
+						});
 					}
 				}
 			}
@@ -96,14 +105,14 @@ public class HilosConProblemasConSwing extends JFrame {
 						// Quitar el primer carácter si hay algún carácter
 						if (taTexto.getText().length()>0) {
 							// Acceso directo al componente desde el hilo
-							taTexto.replaceRange( "", 0, 1 );
+//							taTexto.replaceRange( "", 0, 1 );
 							// TODO 2. ¿Lo soluciona? Probar si se hace el acceso desde Swing
-//							SwingUtilities.invokeLater( new Runnable() {
-//								@Override
-//								public void run() {
-//									taTexto.replaceRange( "", 0, 1 );
-//								}
-//							});
+							SwingUtilities.invokeLater( new Runnable() {
+								@Override
+								public void run() {
+									taTexto.replaceRange( "", 0, 1 );
+								}
+							});
 						}
 					}
 				}
