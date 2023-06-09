@@ -29,6 +29,14 @@ public class Pianillo {
         String fichero = Pianillo.class.getResource( "efecto.wav" ).getFile();
         double[] audioDesdeFich = Pianillo.read( fichero );
         Pianillo.mandaSonido( 0, audioDesdeFich );
+
+        // Prueba 1b. Parar el sonido a los 2 segundos (antes de que acabe)
+        try {
+        	Thread.sleep( 2000 );
+        	Pianillo.acabaSonido( 0 );
+        	System.out.println( "Acaba el efecto.wav");
+        } catch (InterruptedException exc) {
+        }
         
         // Prueba 2. Escala normal (1 canal)
         for (int i = 0; i < escala.length; i++) {
@@ -94,6 +102,7 @@ public class Pianillo {
     private static byte[][] buffer;                 // Buffers internos
     private static int bufferSize[];                // Número de samples actualmente en los buffers internos
     private static Vector<SamplesPendientes>[] vsp; // Vectores de samples pendientes de reproducir por cada canal
+    private static boolean[] pararCanal;            // Booleanos de parada de canal para parada forzosa
     private static boolean seguirHilos;             // Variable booleana de final de hilos
 
     private Pianillo() {}  // Clase static no instanciable
@@ -111,6 +120,7 @@ public class Pianillo {
             line = new SourceDataLine[NUMERO_DE_CANALES];
             buffer = new byte[NUMERO_DE_CANALES][SAMPLE_BUFFER_SIZE * BYTES_POR_SAMPLE/3];
             vsp = new Vector[NUMERO_DE_CANALES];
+            pararCanal = new boolean[NUMERO_DE_CANALES];
             // 44,100 samples por segundo, audio 16bits, mono, PCM con signo, little Endian
             AudioFormat format = new AudioFormat((float) SAMPLES_POR_SEG, BITS_POR_SAMPLE, 1, true, false);
             DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
@@ -169,6 +179,14 @@ public class Pianillo {
         if (samples == null) throw new IllegalArgumentException("argument to play() is null");
     	// El play real lo hace el hilo. Este play solo alimenta a la estructura de datos
     	vsp[canal].add( new SamplesPendientes( samples ) );
+    }
+    
+    /** Acaba el sonido en curso.
+     * @param canal	Número de canal en el que parar el sonido (borrar el sonido pendiente de reproducción)
+     */
+    public static void acabaSonido(int canal) {
+    	vsp[canal].clear();
+    	pararCanal[canal] = true;
     }
 
     /**
@@ -364,6 +382,10 @@ public class Pianillo {
     			} else {
     				double[] samples = vsp[canal].remove(0).samples;
 	    	        for (int i = 0; i < samples.length; i++) {
+	    	        	if (pararCanal[canal]) {  // Se ha pedido consumir el canal antes de que se reproduzca
+	    	        		pararCanal[canal] = false;
+	    	        		break;
+	    	        	}
 	    	        	double sample = samples[i];
 	    	            // clip if outside [-1, +1]
 	    	            if (Double.isNaN(sample)) throw new IllegalArgumentException("sample is NaN");
