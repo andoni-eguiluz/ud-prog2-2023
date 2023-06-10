@@ -1,0 +1,115 @@
+https://github.com/andoni-eguiluz/ud-prog2-2023
+
+Java
+	tipos primitivos
+	paquetes - organización / import tema1.basicos.MetodoFormat / java.lang
+	Clases
+		main -> principales
+		Atributos/fields (con qué) + métodos/method (qué) con su código (cómo)
+		1 nivel de métodos
+		2 niveles de datos - clase (atributos) / método (locales o parámetros)
+		static (datos, métodos) programación estructurada
+		(no static) - POO  (OOP) 
+			Notación Clase.atributo / Clase.método()
+		
+POO
+	Objetos
+		Creación (inicialización) new - constructor
+			Una vez para cada objetos 
+		Referencias   =  ==
+		Variables   null    (NullPointerException!!!)
+		Notación objeto.atributo  / objeto.método()
+			Método se ejecuta EN un objeto (this)
+		Atributos private/protected / métodos public  (encapsulamiento - ocultación)   get/set
+	Clases envoltorio (Integer, Double...)  --> boxing / unboxing
+	Clases contenedoras (objetos con la intención de guardar otros objetos - muchos)
+		Java Collections
+		ArrayList<T> (paramétrica - genericidad)
+			(array dinámico - quitar y meter por medio) - indexadas (0 a n-1)   add get remove set
+		HashMap<K,V> o TreeMap<K,V>
+			Clave (Integer o String) --> asociar a cada objeto
+				Valor
+			put(k,v)   get(k)   remove(k)   containsKey(k)    keySet()
+		HashSet<T> o TreeSet<T> - no indexadas (no acceder - consultar si existe - contains())
+		Hash -> hashCode() / equals()
+		Tree -> implements Comparable<T>
+			compareTo(o2) -> neg si < / 0 si == / pos si >
+				this.ape.compareTo( o2.ape )
+				si 0 -> this.nom.compareTo( o2.nom )
+	Herencia
+		Es simple (1 madre)
+		Empieza Object --> toString() / equals() / hashCode()
+		ES-UN hija es-un madre
+		MUY FUERTE
+			Permite reusar código y datos (no depende de private/public)
+			Permite añadir código y datos (extends) -> modificar código (cómo) @Override
+			Madres -> genéricas / hijas -> específicas
+			Permite generalizar
+				Polimorfismo (de datos)
+			Permite mismo qué y diferente cómo
+				Polimorfismo de código
+		No heredan constructores / static
+		Constructores se llaman en cadena() - super()
+		abstract -> no creamos objetos
+			método abstract - no sabemos codificar
+	Interfaces - comportamiento (métodos)
+		Muy abstractas
+		DÉBIL
+		No se pueden instanciar
+		Clases implementan interfaces (múltiple)
+		Polimórficos
+		Pueden ser paramétricos I<T>
+		Ejemplos: Runnable, Serializable, Comparable<T>
+	enum (lista cerrada de valores)
+	for each (recorrido secuencial inicio a fin / no modificaciones)
+	sort y otros métodos de utilidad
+	Excepciones
+		Gestionadas (descienden de Exception) / No gestionadas (RuntimeException) - NullPointerException
+		Rompe la ejecución -> volver al punto de llamada -> corta
+		Gestionar?
+			Puedo hacer algo con este error?
+				No: throws
+				Sí: try / catch / finally -> recuperar el estado normal de ejecución
+	Ficheros
+		Binarios -> Java lo hace todo por tí: writeObject(o)   (cast) readObject()
+			Serializable -> objeto su clase - atributos - clase madre
+		Texto -> ¿cómo un objeto pasa a texto? -> programar   método convertiratexto() convertirdetexto()
+			Más difícil leer que escribir
+	Ventanas
+		AWT / Swing -> orientada a eventos
+		Componentes y contenedores
+			Comp: JButton, JTextField, JComboBox<T>, JList<T> ...
+			Cont: JFrame, JPanel
+			cont.add( comp )
+		Layouts - BorderLayout, FlowLayout, GridLayout, BoxLayout, null
+			cada contenedor tiene 1 layout
+			Responsive
+		** setVisible(true) -> NUEVO HILO Swing - bucle en tiempo real - dibuja ventanas y procesa eventos
+		Eventos
+			Escribimos código en un gestor - implementar interfaz "Listener"
+				MouseListener, MouseMotionListener, KeyListener, WindowListener, ComponentListener, ListSelectionListener, ActionListener
+				Programar sus métodos (todos)
+					heredar de Adapter -> MouseAdapter, KeyAdapter...
+			Asociar a un componente/contenedor el gestor  comp.add*****Listener( g )
+				Fuente de evento el comp/cont
+				escuchador: gestor
+			SWING -> evento? - mira si gestor -> ejecuta el método que corresponda
+			Eventos son independientes
+			Comunicación entre eventos --> crear atributos
+			Eventos ocurren en variables independientes / tiempos independientes / hilos diferentes
+			Programación asíncrona
+			Lógicas eventos? 
+				MouseListener -> Pressed -> Released -> (Clicked)
+				WindowListener -> Open -> Activated / Desactivated -> Closing (x) -> Closed
+			Deben ser inmediatos
+	Hilos
+		run() -> ** start() una vez
+			Crea un nuevo flujo de ejecución independiente cuyo único trabajo es ejecutar run()
+		Heredar Thread (run) / Implementar Runnable (run)
+		Problema de la parada: ¿parar antes de tiempo? -> variable booleana / interrupt()
+		Problema de la reentrancia: regular los eventos
+			Botón - actionlistener genera el hilo -> desactivar el botón setEnabled(false) / setEnabled(true)
+		
+		
+		
+		
