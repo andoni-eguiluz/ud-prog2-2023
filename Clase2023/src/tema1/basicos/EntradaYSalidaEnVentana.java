@@ -10,7 +10,7 @@ public class EntradaYSalidaEnVentana {
 
 	public static void main(String[] args) {
 		String input;
-		// Ejemplo de entrada de un string por teclado
+		// Ejemplo de entrada de string por teclado
 		input = JOptionPane.showInputDialog( "Introduce un string cualquiera:" );
 		// Ejemplo de salida de string por teclado
 		JOptionPane.showMessageDialog( null, "El string introducido es: " + input );
