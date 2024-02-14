@@ -1,5 +1,0 @@
-{
-	"java.project.sourcePaths": [ "src" ], // Ruta de la carpeta de código fuente (lo suele coger por defecto)
-	"java.project.outputPath": "bin", // Carpeta de salida para los binarios compilados (esto no lo hace por defecto)
-	"editor.insertSpaces": false 
-}
