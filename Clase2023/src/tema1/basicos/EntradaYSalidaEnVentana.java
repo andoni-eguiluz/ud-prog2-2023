@@ -15,7 +15,7 @@ public class EntradaYSalidaEnVentana {
 		// Ejemplo de salida de string por teclado
 		JOptionPane.showMessageDialog( null, "El string introducido es: " + input );
 		System.out.println( "El string introducido es: " + input );  // Salida equivalente a consola
-		// Ejemplo de conversión de string desde teclado a entero
+		// Ejemplo de conversión de string a entero
 		input = JOptionPane.showInputDialog( "Introduce un entero cualquiera:" );
 		int valor = Integer.parseInt( input );
 		JOptionPane.showMessageDialog( null, "El entero introducido es: " + valor );
